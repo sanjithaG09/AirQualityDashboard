@@ -306,9 +306,13 @@ div[data-testid="stColumn"] > div > div[data-testid="stVerticalBlock"] { height:
 """, unsafe_allow_html=True)
 
 # ── Secrets / API ─────────────────────────────────────────────────────────────
-with open('secrets.json') as f:
-    secrets = json.load(f)
-api_key = secrets['openaq-api-key']
+try:
+    api_key = st.secrets["openaq-api-key"]
+except (KeyError, FileNotFoundError):
+    import json
+    with open('secrets.json') as f:
+        secrets = json.load(f)
+    api_key = secrets['openaq-api-key']
 
 # ── Colour / AQI helpers ──────────────────────────────────────────────────────
 POLLUTANT_COLORS = {
